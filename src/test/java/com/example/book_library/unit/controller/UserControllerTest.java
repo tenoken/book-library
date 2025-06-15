@@ -1,5 +1,6 @@
-package com.example.book_library.controller;
+package com.example.book_library.unit.controller;
 
+import com.example.book_library.controller.UserController;
 import com.example.book_library.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +43,5 @@ public class UserControllerTest {
                 .contentType(String.valueOf(MediaType.APPLICATION_JSON))
                 .content(objectMapper.writeValueAsString(userDTO)))
                 .andExpect(status().isBadRequest());
-
     }
 }

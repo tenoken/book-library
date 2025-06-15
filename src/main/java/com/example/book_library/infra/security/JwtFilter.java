@@ -1,13 +1,11 @@
 package com.example.book_library.infra.security;
 
+import com.example.book_library.exception.ExpiredJwtException;
 import com.example.book_library.service.CustomUserDetailsService;
-import io.jsonwebtoken.impl.DefaultClaims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,6 +38,10 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
 
             var claims = tokenProvider.validateToken(token);
+
+            if (claims == null)
+                throw new ExpiredJwtException();
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 
             UsernamePasswordAuthenticationToken auth =
@@ -50,13 +52,4 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-}
-
-@Getter
-@Setter
-class MyClaim{
-    public String sub;
-    public String iss;
-    public String iat;
-    public String exp;
 }

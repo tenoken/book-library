@@ -1,5 +1,6 @@
 package com.example.book_library.infra.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,6 +39,11 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling(handler -> handler.authenticationEntryPoint(
+                ((request, response, authException) -> {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+                })
+        ));
         return http.build();
     }
 
@@ -45,26 +51,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
-//        // Configure your authentication providers here (e.g., using JDBC, in-memory, etc.)
-//        auth.jdbcAuthentication()
-//                .dataSource(dataSource())
-//                .usersByUsernameQuery("select username, password, true from users where username=?")
-//                .authoritiesByUsernameQuery("select username, authority from authorities where username=?");
-//        return auth.build();
-//    }
-//
-//    @Bean
-//    public DataSource dataSource() {
-//        // Add your database configuration here (e.g., using an embedded database for testing)
-//        return new EmbeddedDatabaseBuilder()
-//                .setType(EmbeddedDatabaseType.H2)
-//                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-//                .addScript(JdbcDaoImpl.DEFAULT_USER_DATA_SQL_LOCATION)
-//                .build();
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
