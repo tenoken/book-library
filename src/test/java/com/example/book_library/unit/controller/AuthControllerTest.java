@@ -1,7 +1,7 @@
 package com.example.book_library.unit.controller;
 
 import com.example.book_library.controller.AuthController;
-import com.example.book_library.controller.AuthRequest;
+import com.example.book_library.dto.AuthRequestDTO;
 import com.example.book_library.infra.security.JwtTokenProvider;
 import com.example.book_library.service.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +41,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturnTokenWhenCredentialsAreValid() throws Exception {
-        var request = new AuthRequest("teste123@teste.com","password");
+        var request = new AuthRequestDTO("teste123@teste.com","password");
         var authentication = mock(Authentication.class);
 
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
@@ -57,7 +57,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturn401WhenCredentialsAreInvalid() throws Exception {
-        var request = new AuthRequest("user@example.com","wrongpassword");
+        var request = new AuthRequestDTO("user@example.com","wrongpassword");
 
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new BadCredentialsException("Bad Credentials"));
@@ -72,7 +72,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturn401WhenCredentialsAreNull() throws Exception {
-        var request = new AuthRequest(null,null);
+        var request = new AuthRequestDTO(null,null);
 
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new BadCredentialsException("Bad Credentials"));
@@ -87,7 +87,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturn401WhenCredentialsAreEmpty() throws Exception {
-        var request = new AuthRequest("","");
+        var request = new AuthRequestDTO("","");
 
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new BadCredentialsException("Bad Credentials"));
@@ -102,7 +102,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturn400WhenEmailIsInvalid() throws Exception {
-        var request = new AuthRequest("notvalidemail","");
+        var request = new AuthRequestDTO("notvalidemail","");
 
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new BadCredentialsException("Bad Credentials"));
@@ -117,7 +117,7 @@ public class AuthControllerTest {
 
     @Test
     public void shouldReturn400WhenEmailIsValidAndPasswordEmpty() throws Exception {
-        var request = new AuthRequest("user@example.com","");
+        var request = new AuthRequestDTO("user@example.com","");
 
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new BadCredentialsException("Bad Credentials"));

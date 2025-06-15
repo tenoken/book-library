@@ -1,6 +1,6 @@
 package com.example.book_library.controller;
 
-import com.example.book_library.exception.UserNotAuthenticatedException;
+import com.example.book_library.dto.AuthRequestDTO;
 import com.example.book_library.infra.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> auth(@RequestBody @Valid AuthRequest request){
+    public ResponseEntity<?> auth(@RequestBody @Valid AuthRequestDTO request){
         try{
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
