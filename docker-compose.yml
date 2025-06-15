@@ -1,0 +1,36 @@
+#version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: book_postgres
+    environment:
+      POSTGRES_DB: bookdb
+      POSTGRES_USER: bookuser
+      POSTGRES_PASSWORD: bookpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - book-network
+
+#  app:
+#    build: .
+#    container_name: book_app
+#    depends_on:
+#      - postgres
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/bookdb
+#      SPRING_DATASOURCE_USERNAME: bookuser
+#      SPRING_DATASOURCE_PASSWORD: bookpass
+#    networks:
+#      - book-network
+
+volumes:
+  pgdata:
+
+networks:
+  book-network:
