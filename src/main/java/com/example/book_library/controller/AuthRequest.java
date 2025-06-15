@@ -1,9 +1,11 @@
 package com.example.book_library.controller;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class AuthRequest {
 
+    @Email
     @NotBlank
     private String email;
     @NotBlank

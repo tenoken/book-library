@@ -53,7 +53,10 @@ public class JwtTokenProvider {
 
             //return true;
         } catch (JwtException | IllegalArgumentException e) {
-            return null;
+//            if (e.getMessage().startsWith("JWT expired"))
+//                throw new ExpiredJwtException();
+//            else
+                return null;
         }
     }
 

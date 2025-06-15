@@ -1,5 +1,6 @@
 package com.example.book_library.controller;
 
+import com.example.book_library.exception.UserNotAuthenticatedException;
 import com.example.book_library.infra.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -20,6 +19,7 @@ public class AuthController {
 
     @Autowired
     private final AuthenticationManager authenticationManager;
+    @Autowired
     private final JwtTokenProvider tokenProvider;
 
     public AuthController (AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
@@ -28,14 +28,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> auth(@RequestBody @Valid AuthRequest request){
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    public ResponseEntity<?> auth(@RequestBody @Valid AuthRequest request){
+        try{
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        } catch (AuthenticationException e){
+            return ResponseEntity.status(401).body(Map.of("message", e.getMessage()));
+        }
 
         String token = tokenProvider.createToken(request.getEmail());
-        //String token = tokenProvider.createToken((User)auth.getPrincipal());
 
         return ResponseEntity.ok(Map.of("token", token));
-        //return ResponseEntity.ok(Map.of("token", token));
     }
 }
