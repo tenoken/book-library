@@ -3,6 +3,7 @@ package com.example.book_library.controller;
 import com.example.book_library.dto.UserDTO;
 import com.example.book_library.entity.User;
 import com.example.book_library.service.UserService;
+import jakarta.security.auth.message.AuthException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class UserController {
 
     @PostMapping("/register")
     //@ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws AuthException {
 
         //TODO: VERIFY WHETHER THE USER ALREADY EXIST
         User savedUser = userService.registerUser(userDTO);

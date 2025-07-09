@@ -1,4 +1,4 @@
-package com.example.book_library.unit.controller;
+package com.example.book_library.controller;
 
 import com.example.book_library.controller.UserController;
 import com.example.book_library.dto.UserDTO;

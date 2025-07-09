@@ -10,10 +10,6 @@ public class AuthRequestDTO {
     @NotBlank(message = "Email is required")
     private String email;
     @NotBlank(message = "Password is required")
-    @Pattern(
-            regexp = "",
-            message = "Password must have at least 8 characters, one uppercase letter, one digit and one special character"
-    )
     private String password;
 
     public AuthRequestDTO(String email, String password){
