@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/123}
-    username: ${SPRING_DATASOURCE_USERNAME:123}
-    password: ${SPRING_DATASOURCE_PASSWORD:123}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/bookdb}
+    username: ${SPRING_DATASOURCE_USERNAME:bookuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:bookpass}
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,4 +16,4 @@ kafka:
   bootstrap-servers: localhost:9002
 
 jwt:
-  secret: ${JWT_SECRET:123}
+  secret: ${JWT_SECRET:MHcCAQEEIIuf7agUrWGtLNEyXaCsAcJdIHAS5Y/5c1Fkf4ngBDSxoAoGCCqGSM49AwEHoUQDQgAEIwD+qL3MG8TnHq+1dqOaFiBgHAXY/ZIju7C+RsxoM+/7Naot6ib62I+u1yDoL7cP1ZN9PwPu0z38TrCjm56j0A==}

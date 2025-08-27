@@ -2,6 +2,7 @@ package com.example.book_library.service;
 
 import com.example.book_library.dto.UserDTO;
 import com.example.book_library.entity.User;
+import com.example.book_library.exception.UnavailableEmailException;
 import com.example.book_library.repository.UserRepository;
 import jakarta.security.auth.message.AuthException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +19,13 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @BeforeEach
     void setUp(){
         userRepository = mock(UserRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
-        userService = new UserService(userRepository, passwordEncoder);
+        userServiceImpl = new UserServiceImpl(userRepository, passwordEncoder);
     }
 
     @Test
@@ -35,7 +36,7 @@ public class UserServiceTest {
         User savedUser = new User("newuser@domain.com", "John Smith", "hashedpass");
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        User result = userService.registerUser(new UserDTO(
+        User result = userServiceImpl.registerUser(new UserDTO(
                 "newuser@domain.com",
                 "John Smith",
                 "hashedpass"
@@ -50,10 +51,10 @@ public class UserServiceTest {
         when(userRepository.findByEmail("newuser@domain.com")).thenReturn(Optional.of(
                 new User("newuser@domain.com", "Bob", "hashedpassword")));
 
-        assertThatThrownBy(() -> userService
+        assertThatThrownBy(() -> userServiceImpl
                 .registerUser(new UserDTO("newuser@domain.com","John","hashedpassword")))
-                .isInstanceOf(AuthException.class)
-                .hasMessage("Email already in use.");
+                .isInstanceOf(UnavailableEmailException.class)
+                .hasMessage("This email is already registered.");
 
         verify(userRepository, never()).save(any());
     }
@@ -64,7 +65,7 @@ public class UserServiceTest {
         when(userRepository.findByEmail("john@domain.com")).thenReturn(Optional.of(user));
 
         UserDTO dto = new UserDTO("john@domain.com", "John", "pass123");
-        Optional<User> found = userService.findByEmail(dto);
+        Optional<User> found = userServiceImpl.findByEmail(dto);
         assertThat(found).isPresent().get().isEqualTo(user);
     }
 }

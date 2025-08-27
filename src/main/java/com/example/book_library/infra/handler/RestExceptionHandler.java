@@ -1,6 +1,7 @@
 package com.example.book_library.infra.handler;
 
 import com.example.book_library.exception.ExpiredJwtException;
+import com.example.book_library.exception.UnavailableEmailException;
 import com.example.book_library.exception.UserNotAuthenticatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler  {
     private ResponseEntity<RestErrorMessage> expiredJwtHandler(ExpiredJwtException exception) {
         RestErrorMessage message = new RestErrorMessage(HttpStatus.UNAUTHORIZED, exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
+    }
+
+    @ExceptionHandler(UnavailableEmailException.class)
+    private ResponseEntity<RestErrorMessage> expiredJwtHandler(UnavailableEmailException exception) {
+        RestErrorMessage message = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 }

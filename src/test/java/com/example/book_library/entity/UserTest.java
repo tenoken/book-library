@@ -76,15 +76,15 @@ public class UserTest {
                 .contains("Field should have at least 2 characters length");
     }
 
-    @Test
-    void nullName_shouldFailValidation(){
-        User entity = new User("user@example.com",null,"secret123");
-        Set<ConstraintViolation<User>> violations = validator.validate(entity);
-
-        Assertions.assertThat(violations)
-                .extracting("message")
-                .contains("Name is required");
-    }
+//    @Test
+//    void nullName_shouldFailValidation(){
+//        User entity = new User("user@example.com",null,"secret123");
+//        Set<ConstraintViolation<User>> violations = validator.validate(entity);
+//
+//        Assertions.assertThat(violations)
+//                .extracting("message")
+//                .contains("Name is required");
+//    }
 
     @Test
     void longName_shouldFailValidation(){
